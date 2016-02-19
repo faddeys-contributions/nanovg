@@ -569,6 +569,7 @@ extern NVG_EXPORT int nvgTextBreakLines(NVGcontext* ctx, const char* string, con
 enum NVGtexture {
 	NVG_TEXTURE_ALPHA = 0x01,
 	NVG_TEXTURE_RGBA = 0x02,
+	NVG_TEXTURE_FONT = 0x03,
 };
 
 struct NVGscissor {

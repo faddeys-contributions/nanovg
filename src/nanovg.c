@@ -241,7 +241,7 @@ NVGcontext* nvgCreateInternal(NVGparams* params)
 	if (ctx->fs == NULL) goto error;
 
 	// Create font texture
-	ctx->fontImages[0] = ctx->params.renderCreateTexture(ctx->params.userPtr, NVG_TEXTURE_ALPHA, fontParams.width, fontParams.height, 0, NULL);
+	ctx->fontImages[0] = ctx->params.renderCreateTexture(ctx->params.userPtr, NVG_TEXTURE_FONT, fontParams.width, fontParams.height, 0, NULL);
 	if (ctx->fontImages[0] == 0) goto error;
 	ctx->fontImageIdx = 0;
 
@@ -2259,7 +2259,7 @@ static int nvg__allocTextAtlas(NVGcontext* ctx)
 			iw *= 2;
 		if (iw > NVG_MAX_FONTIMAGE_SIZE || ih > NVG_MAX_FONTIMAGE_SIZE)
 			iw = ih = NVG_MAX_FONTIMAGE_SIZE;
-		ctx->fontImages[ctx->fontImageIdx+1] = ctx->params.renderCreateTexture(ctx->params.userPtr, NVG_TEXTURE_ALPHA, iw, ih, 0, NULL);
+		ctx->fontImages[ctx->fontImageIdx+1] = ctx->params.renderCreateTexture(ctx->params.userPtr, NVG_TEXTURE_FONT, iw, ih, 0, NULL);
 	}
 	++ctx->fontImageIdx;
 	fonsResetAtlas(ctx->fs, iw, ih);
@@ -2271,16 +2271,16 @@ static void nvg__renderText(NVGcontext* ctx, NVGvertex* verts, int nverts)
 	NVGstate* state = nvg__getState(ctx);
 	NVGpaint paint = state->fill;
 
-	// Render triangles.
-	paint.image = ctx->fontImages[ctx->fontImageIdx];
+    // Render triangles.
+    paint.image = ctx->fontImages[ctx->fontImageIdx];
 
 	// Apply global alpha
-	paint.innerColor.a *= state->alpha;
-	paint.outerColor.a *= state->alpha;
+    paint.innerColor.a = state->alpha;
+    paint.outerColor.a = state->alpha;
 
 	ctx->params.renderTriangles(ctx->params.userPtr, &paint, &state->scissor, verts, nverts);
 
-	ctx->drawCallCount++;
+	ctx->drawCallCount ++;
 	ctx->textTriCount += nverts/3;
 }
 

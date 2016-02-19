@@ -139,6 +139,7 @@ void fonsDrawDebug(FONScontext* s, float x, float y);
 
 #define FONS_NOTUSED(v)  (void)sizeof(v)
 
+//#define FONS_USE_FREETYPE
 #ifdef FONS_USE_FREETYPE
 
 #include <ft2build.h>
@@ -1029,8 +1030,11 @@ static FONSglyph* fons__getGlyph(FONScontext* stash, FONSfont* font, unsigned in
 	h = fons__hashint(codepoint) & (FONS_HASH_LUT_SIZE-1);
 	i = font->lut[h];
 	while (i != -1) {
-		if (font->glyphs[i].codepoint == codepoint && font->glyphs[i].size == isize && font->glyphs[i].blur == iblur)
+		if (font->glyphs[i].codepoint == codepoint
+				&& font->glyphs[i].size == isize
+				&& font->glyphs[i].blur == iblur) {
 			return &font->glyphs[i];
+		}
 		i = font->glyphs[i].next;
 	}
 
